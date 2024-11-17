@@ -11,6 +11,7 @@ edu\avanzada\parcialsegundocorte\control\Launcher.class
 edu\avanzada\parcialsegundocorte\control\ClienteHandler.class
 edu\avanzada\parcialsegundocorte\control\ControladorVentanas$1.class
 edu\avanzada\parcialsegundocorte\control\ControladorVentanas.class
+edu\avanzada\parcialsegundocorte\control\SubirCancion.class
 edu\avanzada\parcialsegundocorte\control\ControlServidor.class
 edu\avanzada\parcialsegundocorte\control\Servidor.class
 edu\avanzada\parcialsegundocorte\control\ArchivosRecibidos.class

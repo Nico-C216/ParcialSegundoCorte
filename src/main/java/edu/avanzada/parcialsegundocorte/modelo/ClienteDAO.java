@@ -65,7 +65,7 @@ public class ClienteDAO {
     }
 
     public boolean actualizarSaldo(String usuario, double nuevoSaldo) {
-        String sql = "UPDATE clientes SET saldo = ? WHERE usuario = ?";
+        String sql = "UPDATE clientes SET saldo = saldo + ? WHERE usuario = ?";
 
         try (Connection cn = ConexionMSQ.getConexion(); PreparedStatement ps = cn.prepareStatement(sql)) {
             ps.setDouble(1, nuevoSaldo);

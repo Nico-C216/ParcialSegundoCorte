@@ -8,7 +8,7 @@ import javax.swing.JOptionPane;
 
 /**
  *
- * @author Usuario
+ * @author Nicolas
  */
 public class ControladorAplicacion {
 
@@ -30,28 +30,21 @@ public class ControladorAplicacion {
             String usuario = controladorVentanas.getVentanaRegistro().getUsuario();
             String contrasena = controladorVentanas.getVentanaRegistro().getPuertoServidor();
 
-            if (usuario.isEmpty() || contrasena.isEmpty()) {
-                JOptionPane.showMessageDialog(controladorVentanas.getVentanaRegistro(), "Usuario o contraseña no pueden estar vacíos.");
-                return;
-            }
-
-            // Registrar al usuario en la base de datos
-            boolean registroExitoso = controlServidor.registrarUsuario("Usuario " + usuario, usuario, contrasena);
-            if (registroExitoso) {
-                JOptionPane.showMessageDialog(controladorVentanas.getVentanaRegistro(), "Registro exitoso.");
+            if (controlServidor.verificarCredenciales(usuario, contrasena)) {
+                usuarioActual = usuario;  // Asignar el usuario actual
                 controladorVentanas.mostrarVentanaCanciones();
                 cargarCancionesEnTabla();
             } else {
-                JOptionPane.showMessageDialog(controladorVentanas.getVentanaRegistro(), "Error al registrar usuario. Intenta nuevamente.");
+                JOptionPane.showMessageDialog(controladorVentanas.getVentanaRegistro(), "Credenciales incorrectas.");
             }
         });
 
-        controladorVentanas.getVentanaCanciones().btnSaldo.addActionListener(e -> {
+        // Evento para manejar el ingreso de saldo
+        controladorVentanas.manejarIngresoSaldo(e -> {
             String saldoIngresado = controladorVentanas.getVentanaCanciones().txtSaldo.getText();
             try {
                 double nuevoSaldo = Double.parseDouble(saldoIngresado);
 
-                // Validar que el saldo no sea negativo
                 if (nuevoSaldo < 0) {
                     JOptionPane.showMessageDialog(
                             controladorVentanas.getVentanaCanciones(),
@@ -62,7 +55,6 @@ public class ControladorAplicacion {
                     return;
                 }
 
-                // Actualizar el saldo en la base de datos
                 boolean actualizado = controlServidor.actualizarSaldoCliente(usuarioActual, nuevoSaldo);
                 if (actualizado) {
                     JOptionPane.showMessageDialog(
@@ -72,7 +64,7 @@ public class ControladorAplicacion {
                 } else {
                     JOptionPane.showMessageDialog(
                             controladorVentanas.getVentanaCanciones(),
-                            "Error al actualizar el saldo. Intenta nuevamente.",
+                            "Error al actualizar el saldo. Intente nuevamente.",
                             "Error",
                             JOptionPane.ERROR_MESSAGE
                     );
@@ -135,8 +127,7 @@ public class ControladorAplicacion {
         controlServidor.cargarCancionesEnTabla(controladorVentanas.getVentanaCanciones().jTable1);
     }
 
-    public void inciar() {
+    public void iniciar() {
         controladorVentanas.mostrarVentanaRegistro();
     }
-
 }

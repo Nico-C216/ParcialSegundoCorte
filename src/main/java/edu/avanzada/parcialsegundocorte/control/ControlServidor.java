@@ -30,11 +30,17 @@ public class ControlServidor {
     // Cargar canciones desde la base de datos en la tabla
     public void cargarCancionesEnTabla(JTable tablaCanciones) {
         List<Cancion> canciones = cancionDAO.obtenerCanciones();
-        DefaultTableModel modeloTabla = (DefaultTableModel) tablaCanciones.getModel();
-        modeloTabla.setRowCount(0); // Limpiar la tabla
+        DefaultTableModel modeloTabla = new DefaultTableModel(
+            new String[]{"Nombre", "Artista", "Ruta"}, 0
+        );
+        tablaCanciones.setModel(modeloTabla);
 
         for (Cancion cancion : canciones) {
-            modeloTabla.addRow(new Object[]{cancion.getNombre(), cancion.getArtista(), cancion.getRutaArchivo()});
+            modeloTabla.addRow(new Object[]{
+                cancion.getNombre(),
+                cancion.getArtista(),
+                cancion.getRutaArchivo()
+            });
         }
     }
 
@@ -92,6 +98,7 @@ public class ControlServidor {
     }
 
     public boolean actualizarSaldoCliente(String usuario, double nuevoSaldo) {
+        System.out.println("Actualizando saldo para el usuario: " + usuario + " con saldo: " + nuevoSaldo);
         return clienteDAO.actualizarSaldo(usuario, nuevoSaldo);
     }
 

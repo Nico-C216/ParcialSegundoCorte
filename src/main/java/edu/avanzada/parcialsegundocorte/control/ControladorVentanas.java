@@ -102,6 +102,10 @@ public class ControladorVentanas {
         reproductor.setVisible(false);
         ventanaCanciones.setVisible(true);
     }
+    
+    void manejarIngresoSaldo(ActionListener actionListener) {
+        ventanaCanciones.btnSaldo.addActionListener(actionListener);
+    }
 
     public VentanaRegistro getVentanaRegistro() {
         return ventanaRegistro;
