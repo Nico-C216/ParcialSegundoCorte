@@ -106,6 +106,7 @@ public class ControladorVentanas {
     void manejarIngresoSaldo(ActionListener actionListener) {
         ventanaCanciones.btnSaldo.addActionListener(actionListener);
     }
+    
 
     public VentanaRegistro getVentanaRegistro() {
         return ventanaRegistro;

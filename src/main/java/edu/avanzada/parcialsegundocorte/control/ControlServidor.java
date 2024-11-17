@@ -31,7 +31,7 @@ public class ControlServidor {
     public void cargarCancionesEnTabla(JTable tablaCanciones) {
         List<Cancion> canciones = cancionDAO.obtenerCanciones();
         DefaultTableModel modeloTabla = new DefaultTableModel(
-            new String[]{"Nombre", "Artista", "Ruta"}, 0
+                new String[]{"Nombre", "Artista", "Ruta"}, 0
         );
         tablaCanciones.setModel(modeloTabla);
 

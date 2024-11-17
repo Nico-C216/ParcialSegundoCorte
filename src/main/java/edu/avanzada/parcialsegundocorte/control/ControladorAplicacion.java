@@ -30,52 +30,50 @@ public class ControladorAplicacion {
             String usuario = controladorVentanas.getVentanaRegistro().getUsuario();
             String contrasena = controladorVentanas.getVentanaRegistro().getPuertoServidor();
 
-            if (controlServidor.verificarCredenciales(usuario, contrasena)) {
-                usuarioActual = usuario;  // Asignar el usuario actual
+            if (usuario.isEmpty() || contrasena.isEmpty()) {
+                JOptionPane.showMessageDialog(controladorVentanas.getVentanaRegistro(), "Usuario o contraseña no pueden estar vacíos.");
+                return;
+            }
+
+            boolean registroExitoso = controlServidor.registrarUsuario(usuario, usuario, contrasena);
+            if (registroExitoso) {
+                usuarioActual = usuario; // Guardar el usuario registrado
+                JOptionPane.showMessageDialog(controladorVentanas.getVentanaRegistro(), "Registro exitoso.");
                 controladorVentanas.mostrarVentanaCanciones();
-                cargarCancionesEnTabla();
             } else {
-                JOptionPane.showMessageDialog(controladorVentanas.getVentanaRegistro(), "Credenciales incorrectas.");
+                JOptionPane.showMessageDialog(controladorVentanas.getVentanaRegistro(), "Error al registrar usuario. Intenta nuevamente.");
             }
         });
 
         // Evento para manejar el ingreso de saldo
-        controladorVentanas.manejarIngresoSaldo(e -> {
+        controladorVentanas.getVentanaCanciones().btnSaldo.addActionListener(e -> {
+            if (usuarioActual == null) {
+                JOptionPane.showMessageDialog(controladorVentanas.getVentanaCanciones(),
+                        "Debe estar autenticado para agregar saldo.", "Error", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+
             String saldoIngresado = controladorVentanas.getVentanaCanciones().txtSaldo.getText();
             try {
                 double nuevoSaldo = Double.parseDouble(saldoIngresado);
 
                 if (nuevoSaldo < 0) {
-                    JOptionPane.showMessageDialog(
-                            controladorVentanas.getVentanaCanciones(),
-                            "El saldo no puede ser negativo.",
-                            "Error",
-                            JOptionPane.ERROR_MESSAGE
-                    );
+                    JOptionPane.showMessageDialog(controladorVentanas.getVentanaCanciones(),
+                            "El saldo no puede ser negativo.", "Error", JOptionPane.ERROR_MESSAGE);
                     return;
                 }
 
                 boolean actualizado = controlServidor.actualizarSaldoCliente(usuarioActual, nuevoSaldo);
                 if (actualizado) {
-                    JOptionPane.showMessageDialog(
-                            controladorVentanas.getVentanaCanciones(),
-                            "Saldo actualizado correctamente."
-                    );
+                    JOptionPane.showMessageDialog(controladorVentanas.getVentanaCanciones(),
+                            "Saldo actualizado correctamente.");
                 } else {
-                    JOptionPane.showMessageDialog(
-                            controladorVentanas.getVentanaCanciones(),
-                            "Error al actualizar el saldo. Intente nuevamente.",
-                            "Error",
-                            JOptionPane.ERROR_MESSAGE
-                    );
+                    JOptionPane.showMessageDialog(controladorVentanas.getVentanaCanciones(),
+                            "Error al actualizar el saldo. Intente nuevamente.", "Error", JOptionPane.ERROR_MESSAGE);
                 }
             } catch (NumberFormatException ex) {
-                JOptionPane.showMessageDialog(
-                        controladorVentanas.getVentanaCanciones(),
-                        "Por favor, ingresa un número válido.",
-                        "Error",
-                        JOptionPane.ERROR_MESSAGE
-                );
+                JOptionPane.showMessageDialog(controladorVentanas.getVentanaCanciones(),
+                        "Por favor, ingresa un número válido.", "Error", JOptionPane.ERROR_MESSAGE);
             }
         });
 
