@@ -36,19 +36,35 @@ public class ControladorAplicacion {
         controladorVentanas.getVentanaRegistro().btnRegistrar.addActionListener(e -> {
             String usuario = controladorVentanas.getVentanaRegistro().getUsuario();
             String contrasena = controladorVentanas.getVentanaRegistro().getPuertoServidor();
+            String saldoTexto = controladorVentanas.getVentanaRegistro().getSaldo();
 
-            if (usuario.isEmpty() || contrasena.isEmpty()) {
-                JOptionPane.showMessageDialog(controladorVentanas.getVentanaRegistro(), "Usuario o contraseña no pueden estar vacíos.");
+            if (usuario.isEmpty() || contrasena.isEmpty() || saldoTexto.isEmpty()) {
+                JOptionPane.showMessageDialog(controladorVentanas.getVentanaRegistro(),
+                        "Todos los campos son obligatorios.", "Error", JOptionPane.ERROR_MESSAGE);
                 return;
             }
 
-            boolean registroExitoso = controlServidor.registrarUsuario(usuario, usuario, contrasena);
-            if (registroExitoso) {
-                usuarioActual = usuario; // Guardar el usuario registrado
-                JOptionPane.showMessageDialog(controladorVentanas.getVentanaRegistro(), "Registro exitoso.");
-                controladorVentanas.mostrarVentanaCanciones();
-            } else {
-                JOptionPane.showMessageDialog(controladorVentanas.getVentanaRegistro(), "Error al registrar usuario. Intenta nuevamente.");
+            try {
+                double saldoInicial = Double.parseDouble(saldoTexto);
+
+                if (saldoInicial < 0) {
+                    JOptionPane.showMessageDialog(controladorVentanas.getVentanaRegistro(),
+                            "El saldo inicial no puede ser negativo.", "Error", JOptionPane.ERROR_MESSAGE);
+                    return;
+                }
+
+                boolean registroExitoso = controlServidor.registrarUsuario(usuario, usuario, contrasena, saldoInicial);
+                if (registroExitoso) {
+                    usuarioActual = usuario; // Guardar el usuario registrado
+                    JOptionPane.showMessageDialog(controladorVentanas.getVentanaRegistro(), "Registro exitoso.");
+                    controladorVentanas.mostrarVentanaCanciones();
+                } else {
+                    JOptionPane.showMessageDialog(controladorVentanas.getVentanaRegistro(),
+                            "Error al registrar usuario. Intenta nuevamente.", "Error", JOptionPane.ERROR_MESSAGE);
+                }
+            } catch (NumberFormatException ex) {
+                JOptionPane.showMessageDialog(controladorVentanas.getVentanaRegistro(),
+                        "El saldo inicial debe ser un número válido.", "Error", JOptionPane.ERROR_MESSAGE);
             }
         });
 

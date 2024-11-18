@@ -114,8 +114,8 @@ public class ControlServidor {
      * @param contrasena
      * @return 
      */
-    public boolean registrarUsuario(String nombre, String usuario, String contrasena) {
-        Cliente nuevoCliente = new Cliente(nombre, usuario, contrasena, 0.0); // Saldo inicial 0.0
+    public boolean registrarUsuario(String nombre, String usuario, String contrasena, double saldoInicial) {
+        Cliente nuevoCliente = new Cliente(nombre, usuario, contrasena, saldoInicial);
         boolean registroExitoso = clienteDAO.registrarUsuario(nuevoCliente);
 
         if (registroExitoso) {
