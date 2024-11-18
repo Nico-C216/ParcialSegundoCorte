@@ -11,7 +11,7 @@ import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
 
-/**
+/**Servidor del programa
  *
  * @author Nicolas
  */
@@ -23,6 +23,9 @@ public class Servidor {
     private ClienteService clienteService;
     private CancionDAO cancionDAO;
 
+    /**
+     * Constructor
+     */
     public Servidor() {
         this.puerto = ConfigProperties.getPuerto();
 
@@ -40,6 +43,9 @@ public class Servidor {
         this.cancionDAO = new CancionDAO();
     }
 
+    /**
+     * Metodo para iniciar al servidor
+     */
     public void iniciarServidor() {
         if (!escucharPuerto()) {
             System.out.println("Error: no se pudo abrir el puerto " + puerto);
@@ -55,6 +61,10 @@ public class Servidor {
         ConexionMSQ.desconectar();
     }
 
+    /**
+     * Metodo para escuchar al puerto
+     * @return 
+     */
     private boolean escucharPuerto() {
         try {
             sckEntradaServidor = new ServerSocket(puerto);
@@ -65,6 +75,9 @@ public class Servidor {
         }
     }
 
+    /**
+     * Metodo para procesar a los usuarios conectados
+     */
     private void procesarSolicitudes() {
         System.out.println("Esperando conexión de clientes...");
 
@@ -85,6 +98,9 @@ public class Servidor {
         }
     }
 
+    /**
+     * Metodo para detener el servidor
+     */
     private void detenerServidor() {
         try {
             if (sckEntradaServidor != null && !sckEntradaServidor.isClosed()) {
@@ -96,6 +112,10 @@ public class Servidor {
         }
     }
 
+    /**
+     * Metodo principal para iniciar el servidor
+     * @param args 
+     */
     public static void main(String[] args) {
         Servidor servidor = new Servidor();
         servidor.iniciarServidor();

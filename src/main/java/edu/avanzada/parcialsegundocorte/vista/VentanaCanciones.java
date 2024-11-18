@@ -6,9 +6,9 @@ package edu.avanzada.parcialsegundocorte.vista;
 
 import edu.avanzada.parcialsegundocorte.control.ControladorVentanas;
 
-/**
+/**Ventana de las canciones
  *
- * @author Usuario
+ * @author Nicolas
  */
 public class VentanaCanciones extends javax.swing.JFrame {
 

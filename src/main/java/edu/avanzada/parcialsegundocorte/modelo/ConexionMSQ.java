@@ -8,7 +8,7 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 
-/**
+/**Clase especializada en la conexion de la base de datos con el servidor
  *
  * @author Nicolas
  */
@@ -21,7 +21,10 @@ public class ConexionMSQ {
     private static final String USUARIO = "root"; 
     private static final String CONTRASENA = "";  
 
-    // Método para obtener la conexión
+    /**
+     * Método para obtener la conexión
+     * @return 
+     */
     public static Connection getConexion() {
         if (cn == null) {
             try {
@@ -35,7 +38,9 @@ public class ConexionMSQ {
         return cn;
     }
 
-    // Método para cerrar la conexión
+    /**
+     * Método para cerrar la conexión
+     */
     public static void desconectar() {
         if (cn != null) {
             try {

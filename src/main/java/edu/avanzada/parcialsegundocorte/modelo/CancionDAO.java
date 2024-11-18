@@ -7,13 +7,16 @@ package edu.avanzada.parcialsegundocorte.modelo;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
-/**
+/**Clase con el parton DAO para ingresarlas a la base de datos
  *
  * @author Nicolas
  */
 public class CancionDAO {
 
-    // Método para obtener todas las canciones disponibles
+    /**
+     * Método para obtener todas las canciones disponibles
+     * @return 
+     */
     public List<Cancion> obtenerCanciones() {
         List<Cancion> canciones = new ArrayList<>();
         String sql = "SELECT * FROM canciones";
@@ -38,7 +41,11 @@ public class CancionDAO {
         return canciones;
     }
 
-    // Método para obtener la ruta de una canción por su nombre
+    /**
+     * Método para obtener la ruta de una canción por su nombre
+     * @param nombreCancion
+     * @return 
+     */
     public String obtenerRutaPorNombre(String nombreCancion) {
         String ruta = null;
         String sql = "SELECT rutaArchivo FROM canciones WHERE nombre = ?";

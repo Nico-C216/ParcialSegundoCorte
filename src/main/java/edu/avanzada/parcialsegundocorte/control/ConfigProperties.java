@@ -9,7 +9,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.Properties;
 
-/**
+/**Clase especializada en configurar el puerto desde un .properties para el servidor
  *
  * @author Nicolas
  */
@@ -17,10 +17,13 @@ public class ConfigProperties {
 
     private static Properties propiedades;
 
+    /***
+     * Metodo para obtener el archivo
+     */
     static {
         propiedades = new Properties();
         try {
-            // Cambia "ruta/completa/del/proyecto/Servidor.properties" por la ruta absoluta en tu sistema
+            
             FileInputStream entrada = new FileInputStream("C:\\Users\\Usuario\\OneDrive\\Documentos\\Nico\\Universidad\\Programacion Avanzada\\Paricl-Segundo-Corte-PA\\ParcialSegundoCorte\\src\\main\\java\\edu\\avanzada\\parcialsegundocorte\\data\\Servidor.properties"); 
             propiedades.load(entrada);
             System.out.println("Archivo de configuración cargado exitosamente.");
@@ -29,6 +32,10 @@ public class ConfigProperties {
         }
     }
 
+    /**
+     * Metodo para obtener el pueto del archivo .propertiess
+     * @return 
+     */
     public static int getPuerto() {
         String puertoStr = propiedades.getProperty("puerto");
 

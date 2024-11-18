@@ -4,7 +4,7 @@
  */
 package edu.avanzada.parcialsegundocorte.modelo;
 
-/**
+/**Clase con la informacion de las canciones
  *
  * @author Nicolas
  */
@@ -15,6 +15,13 @@ public class Cancion {
     private String artista;
     private String rutaArchivo;
 
+    /**
+     * Constructor
+     * @param id
+     * @param nombre
+     * @param artista
+     * @param rutaArchivo 
+     */
     public Cancion(int id, String nombre, String artista, String rutaArchivo) {
         this.id = id;
         this.nombre = nombre;

@@ -8,7 +8,8 @@ import java.io.*;
 import java.net.Socket;
 import javax.swing.JFileChooser;
 
-/**
+/**Clase especializada en que el usuario reciba y pueda descargar el archivo 
+ * enviado por el servidor
  *
  * @author Nicolas
  */
@@ -17,6 +18,9 @@ public class ArchivosRecibidos {
     public static final int TAMANO_BUFFER = 4096;
     private String rutaCarpetaDescarga;
 
+    /**
+     * Constructor que abre un FileChooser para escocger la ruta de descarga
+     */
     public ArchivosRecibidos() {
         JFileChooser fileChooser = new JFileChooser();
         fileChooser.setDialogTitle("Selecciona la carpeta de destino para las canciones");
@@ -32,6 +36,11 @@ public class ArchivosRecibidos {
         }
     }
 
+    /**
+     * Metodo para recibir el archivo
+     * @param socket
+     * @param nombreArchivo 
+     */
     public void recibirArchivo(Socket socket, String nombreArchivo) {
         if (rutaCarpetaDescarga == null) {
             System.out.println("Error: No se ha seleccionado la carpeta de descarga.");

@@ -4,11 +4,11 @@
  */
 package edu.avanzada.parcialsegundocorte.vista;
 
-import edu.avanzada.parcialsegundocorte.control.ControladorVentanas;
 
-/**
+
+/**Ventana Del reproductor
  *
- * @author Usuario
+ * @author Nicolas
  */
 public class Reproductor extends javax.swing.JFrame {
 

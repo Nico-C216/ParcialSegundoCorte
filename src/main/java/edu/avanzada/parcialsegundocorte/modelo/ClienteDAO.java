@@ -6,13 +6,17 @@ package edu.avanzada.parcialsegundocorte.modelo;
 
 import java.sql.*;
 
-/**
+/**Clase que maneja el DAO para el registro de los clientes en la base de datos
  *
  * @author Nicolas
  */
 public class ClienteDAO {
 
-    // Método para verificar el saldo de un cliente
+    /**
+     * Método para verificar el saldo de un cliente
+     * @param usuario
+     * @return 
+     */
     public double obtenerSaldo(String usuario) {
         double saldo = 0.0;
         String sql = "SELECT saldo FROM clientes WHERE usuario = ?";
@@ -32,7 +36,12 @@ public class ClienteDAO {
         return saldo;
     }
 
-    // Método para descontar saldo tras una compra
+    /**
+     * Método para descontar saldo tras una compra
+     * @param usuario
+     * @param monto
+     * @return 
+     */
     public boolean descontarSaldo(String usuario, double monto) {
         String sql = "UPDATE clientes SET saldo = saldo - ? WHERE usuario = ?";
 
@@ -50,6 +59,12 @@ public class ClienteDAO {
         return false;
     }
 
+    /**
+     * Metodo para verificar las credenciales
+     * @param usuario
+     * @param contrasena
+     * @return 
+     */
     public boolean verificarCredenciales(String usuario, String contrasena) {
         String sql = "SELECT COUNT(*) FROM clientes WHERE usuario = ? AND contrasena = ?";
         try (Connection cn = ConexionMSQ.getConexion(); PreparedStatement ps = cn.prepareStatement(sql)) {
@@ -64,6 +79,12 @@ public class ClienteDAO {
         return false;
     }
 
+    /**
+     * Metodo para actualizar el saldo del usuario
+     * @param usuario
+     * @param nuevoSaldo
+     * @return 
+     */
     public boolean actualizarSaldo(String usuario, double nuevoSaldo) {
         String sql = "UPDATE clientes SET saldo = saldo + ? WHERE usuario = ?";
 
@@ -80,6 +101,11 @@ public class ClienteDAO {
         return false;
     }
 
+    /**
+     * Metodo para registrar al usuario 
+     * @param cliente
+     * @return 
+     */
     public boolean registrarUsuario(Cliente cliente) {
         String sql = "INSERT INTO clientes (nombre, usuario, contrasena, saldo) VALUES (?, ?, ?, ?)";
         try (Connection cn = ConexionMSQ.getConexion(); PreparedStatement ps = cn.prepareStatement(sql)) {

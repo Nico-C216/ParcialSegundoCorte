@@ -14,7 +14,7 @@ import java.net.Socket;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-/**
+/**Clase especializada en el manejo de de los hilos de cada cliete
  *
  * @author Nicolas
  */
@@ -27,6 +27,12 @@ public class ClienteHandler implements Runnable {
 
     private String usuario;
 
+    /**
+     * Constructor
+     * @param socketCliente
+     * @param clienteService
+     * @param cancionDAO 
+     */
     public ClienteHandler(Socket socketCliente, ClienteService clienteService, CancionDAO cancionDAO) {
         this.socketCliente = socketCliente;
         this.clienteService = clienteService;
@@ -34,6 +40,9 @@ public class ClienteHandler implements Runnable {
         this.archivosEnviados = new ArchivosEnviados();
     }
 
+    /**
+     * Metodo para conectar varios usuarios al servidor
+     */
     @Override
     public void run() {
         try (BufferedReader entrada = new BufferedReader(new InputStreamReader(socketCliente.getInputStream())); PrintWriter salida = new PrintWriter(socketCliente.getOutputStream(), true)) {
@@ -56,6 +65,13 @@ public class ClienteHandler implements Runnable {
         }
     }
 
+    /**
+     * Metodo para autenticar al cliente
+     * @param entrada
+     * @param salida
+     * @return
+     * @throws IOException 
+     */
     private boolean autenticarCliente(BufferedReader entrada, PrintWriter salida) throws IOException {
         salida.println("Ingrese su usuario:");
         String usuario = entrada.readLine();
@@ -72,12 +88,22 @@ public class ClienteHandler implements Runnable {
         }
     }
 
+    /**
+     * Metodo para enviarle unalista de todas las canciones al usuario
+     * @param salida 
+     */
     private void enviarListaCanciones(PrintWriter salida) {
         salida.println("Lista de canciones disponibles:");
         cancionDAO.obtenerCanciones().forEach(c
                 -> salida.println(c.getNombre() + "|" + c.getArtista() + "|" + c.getRutaArchivo()));
     }
 
+    /**
+     * Metodo para procesar la solicitud del usuario
+     * @param entrada
+     * @param salida
+     * @throws IOException 
+     */
     private void procesarSolicitudes(BufferedReader entrada, PrintWriter salida) throws IOException {
         String solicitud;
         while ((solicitud = entrada.readLine()) != null) {
@@ -93,6 +119,11 @@ public class ClienteHandler implements Runnable {
         }
     }
 
+    /**
+     * Metodo para procesar la descarga
+     * @param nombreCancion
+     * @param salida 
+     */
     private void procesarDescarga(String nombreCancion, PrintWriter salida) {
         String rutaCancion = cancionDAO.obtenerRutaPorNombre(nombreCancion);
         if (rutaCancion == null) {

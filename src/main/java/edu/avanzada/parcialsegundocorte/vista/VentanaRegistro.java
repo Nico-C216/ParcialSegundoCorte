@@ -10,9 +10,9 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-/**
+/**Ventana del ergistro de usuarios
  *
- * @author Usuario
+ * @author Nicolas
  */
 public class VentanaRegistro extends JFrame {
 

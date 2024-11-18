@@ -9,7 +9,7 @@ import java.net.Socket;
 import javax.swing.JFileChooser;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
-/**
+/**Clase especializada para que el servidor pueda enviar el archivo al usuario
  *
  * @author Nicolas
  */
@@ -17,7 +17,11 @@ public class ArchivosEnviados {
 
     private static final int TAMANO_BUFFER = 4096;
 
-    // Método para enviar el archivo
+    /**
+     * Método para enviar el archivo
+     * @param socketCliente
+     * @param rutaArchivo 
+     */
     public void enviarArchivo(Socket socketCliente, String rutaArchivo) {
         if (rutaArchivo == null || rutaArchivo.isEmpty()) {
             System.out.println("Error: No hay una ruta valida del archivo.");

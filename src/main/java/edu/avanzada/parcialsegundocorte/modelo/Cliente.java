@@ -4,7 +4,7 @@
  */
 package edu.avanzada.parcialsegundocorte.modelo;
 
-/**
+/**Clase con la informacion del cliente registrado en el servidor
  *
  * @author Nicolas
  */
@@ -14,6 +14,13 @@ public class Cliente {
     private String contraseña;
     private double saldoPendiente;
 
+    /**
+     * Constructor
+     * @param nombre
+     * @param usuario
+     * @param contraseña
+     * @param saldoPendiente 
+     */
     public Cliente(String nombre, String usuario, String contraseña, double saldoPendiente) {
         this.nombre = nombre;
         this.usuario = usuario;
@@ -21,6 +28,7 @@ public class Cliente {
         this.saldoPendiente = saldoPendiente;
     }
 
+    //Get y set
     public String getNombre() {
         return nombre;
     }

@@ -11,9 +11,9 @@ import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-/**
+/**Clase especializada en el manejo de eventos de las 3 ventanas
  *
- * @author Usuario
+ * @author nicolas
  */
 public class ControladorVentanas {
 
@@ -21,6 +21,9 @@ public class ControladorVentanas {
     private VentanaCanciones ventanaCanciones;
     private Reproductor reproductor;
 
+    /**
+     * Constructor
+     */
     public ControladorVentanas() {
         // Inicializar ventanas y pasar este controlador
         ventanaRegistro = new VentanaRegistro();
@@ -67,18 +70,28 @@ public class ControladorVentanas {
         });
     }
 
+    /**
+     * Metodo para mostrar la ventana del registro
+     */
     void mostrarVentanaRegistro() {
         ventanaRegistro.setVisible(true);
         ventanaCanciones.setVisible(false);
         reproductor.setVisible(false);
     }
 
+    /**
+     * Metodo para mostrar la ventana de las canciones
+     */
     void mostrarVentanaCanciones() {
         ventanaRegistro.setVisible(false);
         ventanaCanciones.setVisible(true);
         reproductor.setVisible(false);
     }
 
+    /**
+     * Metodo para mostrar el reproductor de las canciones
+     * @param nombreCancion 
+     */
     void mostrarReproductor(String nombreCancion) {
         ventanaRegistro.setVisible(false);
         ventanaCanciones.setVisible(false);
@@ -86,7 +99,11 @@ public class ControladorVentanas {
         reproductor.nombre_can.setText(nombreCancion); // Mostrar el nombre de la canción
     }
 
-    // Método para registrar usuario
+    /**
+     * Método para registrar usuario
+     * @param usuario
+     * @param puertoServidor 
+     */
     public void registrarUsuario(String usuario, String puertoServidor) {
         System.out.println("Usuario registrado: " + usuario + ", Puerto: " + puertoServidor);
 
@@ -98,24 +115,45 @@ public class ControladorVentanas {
         }
     }
 
+    /**
+     * Metodo para volver a la lista
+     */
     private void volverALaLista() {
         reproductor.setVisible(false);
         ventanaCanciones.setVisible(true);
     }
     
+    /**
+     * Metodo para ingresar saldo
+     * @param actionListener 
+     */
     void manejarIngresoSaldo(ActionListener actionListener) {
         ventanaCanciones.btnSaldo.addActionListener(actionListener);
     }
     
 
+    /**
+     * Metodo para obtener la ventana del registro
+     * @return 
+     */
     public VentanaRegistro getVentanaRegistro() {
         return ventanaRegistro;
     }
+    
+    
 
+    /**
+     * Metodo para obtener la ventana de las caciones
+     * @return 
+     */
     public VentanaCanciones getVentanaCanciones() {
         return ventanaCanciones;
     }
 
+    /**
+     * metodo para obtener la ventana del reproductor
+     * @return 
+     */
     public Reproductor getReproductor() {
         return reproductor;
     }

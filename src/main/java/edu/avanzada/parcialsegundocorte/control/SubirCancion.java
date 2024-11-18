@@ -10,14 +10,17 @@ import java.io.*;
 import java.sql.*;
 import javax.swing.*;
 import javax.swing.filechooser.FileNameExtensionFilter;
-/**
+/**Clase especializada en subir la URL de las canciones a la base de datos
  *
- * @author Usuario
+ * @author Nicolas
  */
 public class SubirCancion {
 
     private static final String DIRECTORIO_SERVIDOR = "C:\\Users\\Usuario\\OneDrive\\Documentos\\Nico\\Universidad\\Programacion Avanzada\\Canciones";
 
+    /**
+     * Metodo para subir la cancion
+     */
     public static void subirCancion() {
         // Crear el JFileChooser para seleccionar archivos .mp3
         JFileChooser fileChooser = new JFileChooser();
@@ -55,6 +58,12 @@ public class SubirCancion {
         }
     }
 
+    /**
+     * Metodo para registrar una cancion a la base de datos
+     * @param nombre
+     * @param artista
+     * @param rutaArchivo 
+     */
     private static void registrarCancionEnBD(String nombre, String artista, String rutaArchivo) {
         String sql = "INSERT INTO canciones (nombre, artista, rutaArchivo) VALUES (?, ?, ?)";
 
@@ -76,6 +85,10 @@ public class SubirCancion {
         }
     }
 
+    /**
+     * Metodo para subir las caicones de manera separada al programa
+     * @param args 
+     */
     public static void main(String[] args) {
         subirCancion();
     }

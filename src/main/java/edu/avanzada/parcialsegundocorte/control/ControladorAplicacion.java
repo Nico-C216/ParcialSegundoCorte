@@ -6,7 +6,7 @@ package edu.avanzada.parcialsegundocorte.control;
 
 import javax.swing.JOptionPane;
 
-/**
+/**Clase especializada en el control de toda la aplicacion
  *
  * @author Nicolas
  */
@@ -17,6 +17,9 @@ public class ControladorAplicacion {
 
     private String usuarioActual;
 
+    /**
+     * Constructor
+     */
     public ControladorAplicacion() {
         controladorVentanas = new ControladorVentanas();
         controlServidor = new ControlServidor();
@@ -24,6 +27,10 @@ public class ControladorAplicacion {
         configurarEventos();
     }
 
+    /**
+     * Configuracion de eventos entre la vista, servidor, base de datos y el 
+     * usuario
+     */
     private void configurarEventos() {
         // Evento para registrar usuario en VentanaRegistro
         controladorVentanas.getVentanaRegistro().btnRegistrar.addActionListener(e -> {
@@ -121,10 +128,16 @@ public class ControladorAplicacion {
         });
     }
 
+    /**
+     * Metodo para cargar canciones en la tabla
+     */
     private void cargarCancionesEnTabla() {
         controlServidor.cargarCancionesEnTabla(controladorVentanas.getVentanaCanciones().jTable1);
     }
 
+    /**
+     * Metodo para iniciar la aplicacion
+     */
     public void iniciar() {
         controladorVentanas.mostrarVentanaRegistro();
     }
