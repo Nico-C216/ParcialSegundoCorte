@@ -6,7 +6,8 @@ package edu.avanzada.parcialsegundocorte.modelo;
 
 import java.sql.*;
 
-/**Clase que maneja el DAO para el registro de los clientes en la base de datos
+/**
+ * Clase que maneja el DAO para el registro de los clientes en la base de datos
  *
  * @author Nicolas
  */
@@ -14,8 +15,9 @@ public class ClienteDAO {
 
     /**
      * Método para verificar el saldo de un cliente
+     *
      * @param usuario
-     * @return 
+     * @return
      */
     public double obtenerSaldo(String usuario) {
         double saldo = 0.0;
@@ -38,9 +40,10 @@ public class ClienteDAO {
 
     /**
      * Método para descontar saldo tras una compra
+     *
      * @param usuario
      * @param monto
-     * @return 
+     * @return
      */
     public boolean descontarSaldo(String usuario, double monto) {
         String sql = "UPDATE clientes SET saldo = saldo - ? WHERE usuario = ?";
@@ -61,9 +64,10 @@ public class ClienteDAO {
 
     /**
      * Metodo para verificar las credenciales
+     *
      * @param usuario
      * @param contrasena
-     * @return 
+     * @return
      */
     public boolean verificarCredenciales(String usuario, String contrasena) {
         String sql = "SELECT COUNT(*) FROM clientes WHERE usuario = ? AND contrasena = ?";
@@ -81,9 +85,10 @@ public class ClienteDAO {
 
     /**
      * Metodo para actualizar el saldo del usuario
+     *
      * @param usuario
      * @param nuevoSaldo
-     * @return 
+     * @return
      */
     public boolean actualizarSaldo(String usuario, double nuevoSaldo) {
         String sql = "UPDATE clientes SET saldo = saldo + ? WHERE usuario = ?";
@@ -102,9 +107,10 @@ public class ClienteDAO {
     }
 
     /**
-     * Metodo para registrar al usuario 
+     * Metodo para registrar al usuario
+     *
      * @param cliente
-     * @return 
+     * @return
      */
     public boolean registrarUsuario(Cliente cliente) {
         String sql = "INSERT INTO clientes (nombre, usuario, contrasena, saldo) VALUES (?, ?, ?, ?)";

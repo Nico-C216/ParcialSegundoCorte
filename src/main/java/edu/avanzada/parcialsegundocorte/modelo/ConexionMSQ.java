@@ -8,7 +8,8 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 
-/**Clase especializada en la conexion de la base de datos con el servidor
+/**
+ * Clase especializada en la conexion de la base de datos con el servidor
  *
  * @author Nicolas
  */
@@ -18,22 +19,23 @@ public class ConexionMSQ {
 
     // Datos de conexión 
     private static final String URLBD = "jdbc:mariadb://localhost:3306/parcial2";
-    private static final String USUARIO = "root"; 
-    private static final String CONTRASENA = "";  
+    private static final String USUARIO = "root";
+    private static final String CONTRASENA = "";
 
     /**
      * Método para obtener la conexión
-     * @return 
+     *
+     * @return
      */
     public static Connection getConexion() {
-        if (cn == null) {
-            try {
+        try {
+            if (cn == null || cn.isClosed()) { // Verifica si la conexión está cerrada
                 cn = DriverManager.getConnection(URLBD, USUARIO, CONTRASENA);
                 System.out.println("Conexión exitosa a la base de datos.");
-            } catch (SQLException ex) {
-                System.out.println("Error en la conexión: " + ex.getMessage());
-                ex.printStackTrace();
             }
+        } catch (SQLException ex) {
+            System.out.println("Error en la conexión: " + ex.getMessage());
+            ex.printStackTrace();
         }
         return cn;
     }

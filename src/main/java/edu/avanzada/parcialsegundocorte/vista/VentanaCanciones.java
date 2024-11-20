@@ -30,8 +30,6 @@ public class VentanaCanciones extends javax.swing.JFrame {
     private void initComponents() {
 
         jMenuItem1 = new javax.swing.JMenuItem();
-        jScrollPane1 = new javax.swing.JScrollPane();
-        jTable1 = new javax.swing.JTable();
         jButton1 = new javax.swing.JButton();
         jButton2 = new javax.swing.JButton();
         jButton3 = new javax.swing.JButton();
@@ -39,26 +37,13 @@ public class VentanaCanciones extends javax.swing.JFrame {
         jLabel2 = new javax.swing.JLabel();
         txtSaldo = new javax.swing.JTextField();
         btnSaldo = new javax.swing.JButton();
+        jScrollPane2 = new javax.swing.JScrollPane();
+        jListCanciones = new javax.swing.JList<>();
 
         jMenuItem1.setText("jMenuItem1");
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
-
-        jTable1.setModel(new javax.swing.table.DefaultTableModel(
-            new Object [][] {
-                {null},
-                {null},
-                {null},
-                {null}
-            },
-            new String [] {
-                "Title 1"
-            }
-        ));
-        jScrollPane1.setViewportView(jTable1);
-
-        getContentPane().add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 20, 320, 310));
 
         jButton1.setText("Escuchar Canción");
         getContentPane().add(jButton1, new org.netbeans.lib.awtextra.AbsoluteConstraints(440, 30, 140, 30));
@@ -91,6 +76,15 @@ public class VentanaCanciones extends javax.swing.JFrame {
         });
         getContentPane().add(btnSaldo, new org.netbeans.lib.awtextra.AbsoluteConstraints(500, 130, -1, -1));
 
+        jListCanciones.setModel(new javax.swing.AbstractListModel<String>() {
+            String[] strings = { "Item 1", "Item 2", "Item 3", "Item 4", "Item 5" };
+            public int getSize() { return strings.length; }
+            public String getElementAt(int i) { return strings[i]; }
+        });
+        jScrollPane2.setViewportView(jListCanciones);
+
+        getContentPane().add(jScrollPane2, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 30, 250, 280));
+
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
@@ -111,9 +105,9 @@ public class VentanaCanciones extends javax.swing.JFrame {
     public javax.swing.JButton jButton3;
     public javax.swing.JLabel jLabel1;
     public javax.swing.JLabel jLabel2;
+    public javax.swing.JList<String> jListCanciones;
     private javax.swing.JMenuItem jMenuItem1;
-    private javax.swing.JScrollPane jScrollPane1;
-    public javax.swing.JTable jTable1;
+    private javax.swing.JScrollPane jScrollPane2;
     public javax.swing.JTextField txtSaldo;
     // End of variables declaration//GEN-END:variables
 }

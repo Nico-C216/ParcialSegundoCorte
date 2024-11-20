@@ -4,9 +4,19 @@
  */
 package edu.avanzada.parcialsegundocorte.control;
 
+import edu.avanzada.parcialsegundocorte.modelo.Cancion;
+import edu.avanzada.parcialsegundocorte.modelo.CancionDAO;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
+import java.util.List;
+import javax.swing.DefaultListModel;
 import javax.swing.JOptionPane;
+import javax.swing.JTable;
+import javax.swing.ListModel;
+import javax.swing.table.DefaultTableModel;
 
-/**Clase especializada en el control de toda la aplicacion
+/**
+ * Clase especializada en el control de toda la aplicacion
  *
  * @author Nicolas
  */
@@ -14,6 +24,7 @@ public class ControladorAplicacion {
 
     private ControladorVentanas controladorVentanas;
     private ControlServidor controlServidor;
+    private ClienteService clienteService;
 
     private String usuarioActual;
 
@@ -28,7 +39,7 @@ public class ControladorAplicacion {
     }
 
     /**
-     * Configuracion de eventos entre la vista, servidor, base de datos y el 
+     * Configuracion de eventos entre la vista, servidor, base de datos y el
      * usuario
      */
     private void configurarEventos() {
@@ -58,6 +69,7 @@ public class ControladorAplicacion {
                     usuarioActual = usuario; // Guardar el usuario registrado
                     JOptionPane.showMessageDialog(controladorVentanas.getVentanaRegistro(), "Registro exitoso.");
                     controladorVentanas.mostrarVentanaCanciones();
+                    cargarCancionesEnLista();
                 } else {
                     JOptionPane.showMessageDialog(controladorVentanas.getVentanaRegistro(),
                             "Error al registrar usuario. Intenta nuevamente.", "Error", JOptionPane.ERROR_MESSAGE);
@@ -102,10 +114,9 @@ public class ControladorAplicacion {
 
         // Evento para seleccionar una canción y escucharla en el Reproductor
         controladorVentanas.getVentanaCanciones().jButton1.addActionListener(e -> {
-            int selectedRow = controladorVentanas.getVentanaCanciones().jTable1.getSelectedRow();
-            if (selectedRow != -1) {
-                String nombreCancion = (String) controladorVentanas.getVentanaCanciones().jTable1.getValueAt(selectedRow, 0);
-                controladorVentanas.mostrarReproductor(nombreCancion);
+            String cancionSeleccionada = controladorVentanas.getVentanaCanciones().jListCanciones.getSelectedValue();
+            if (cancionSeleccionada != null) {
+                controladorVentanas.mostrarReproductor(cancionSeleccionada);
             } else {
                 JOptionPane.showMessageDialog(
                         controladorVentanas.getVentanaCanciones(),
@@ -116,13 +127,11 @@ public class ControladorAplicacion {
 
         // Evento para descargar una canción
         controladorVentanas.getVentanaCanciones().jButton3.addActionListener(e -> {
-            int selectedRow = controladorVentanas.getVentanaCanciones().jTable1.getSelectedRow();
-            if (selectedRow != -1) {
-                String nombreCancion = (String) controladorVentanas.getVentanaCanciones().jTable1.getValueAt(selectedRow, 0);
+            String cancionSeleccionada = controladorVentanas.getVentanaCanciones().jListCanciones.getSelectedValue();
+            if (cancionSeleccionada != null) {
                 double precioCancion = 1500.0; // Precio fijo, ajustable según la lógica
-
                 boolean exito = controlServidor.procesarDescarga(
-                        null, usuarioActual, nombreCancion, precioCancion
+                        null, usuarioActual, cancionSeleccionada, precioCancion
                 );
                 if (exito) {
                     JOptionPane.showMessageDialog(
@@ -142,13 +151,31 @@ public class ControladorAplicacion {
                 );
             }
         });
+
+        controladorVentanas.getVentanaCanciones().addWindowListener(new WindowAdapter() {
+            @Override
+            public void windowOpened(WindowEvent e) {
+                cargarCancionesEnLista(); // Cargar las canciones cuando se abre la ventana
+            }
+        });
     }
 
     /**
      * Metodo para cargar canciones en la tabla
      */
-    private void cargarCancionesEnTabla() {
-        controlServidor.cargarCancionesEnTabla(controladorVentanas.getVentanaCanciones().jTable1);
+    public void cargarCancionesEnLista() {
+        // Crear una instancia del DAO para obtener las canciones
+        CancionDAO cancionDAO = new CancionDAO();
+        List<Cancion> canciones = cancionDAO.obtenerCanciones();
+
+        // Crear un modelo para JList
+        DefaultListModel<String> modelo = new DefaultListModel<>();
+        for (Cancion cancion : canciones) {
+            modelo.addElement(cancion.getNombre() + " - " + cancion.getArtista()); // Formato: Nombre - Artista
+        }
+
+        // Asignar el modelo al JList
+        controladorVentanas.getVentanaCanciones().jListCanciones.setModel(modelo);
     }
 
     /**
@@ -156,5 +183,8 @@ public class ControladorAplicacion {
      */
     public void iniciar() {
         controladorVentanas.mostrarVentanaRegistro();
+
+        controladorVentanas.mostrarVentanaCanciones();
+        cargarCancionesEnLista();
     }
 }

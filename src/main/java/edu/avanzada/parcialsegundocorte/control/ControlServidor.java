@@ -13,7 +13,8 @@ import java.util.List;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
 
-/**Clase especializada en el manejo del servidor con el usuario
+/**
+ * Clase especializada en el manejo del servidor con el usuario
  *
  * @author Nicolas
  */
@@ -21,6 +22,7 @@ public class ControlServidor {
 
     private CancionDAO cancionDAO;
     private ClienteDAO clienteDAO;
+    private ClienteService clienteService;
 
     /**
      * Constructor
@@ -28,11 +30,14 @@ public class ControlServidor {
     public ControlServidor() {
         this.cancionDAO = new CancionDAO();
         this.clienteDAO = new ClienteDAO();
+        this.clienteService = new ClienteService(clienteDAO);
+
     }
 
     /**
      * Cargar canciones desde la base de datos en la tabla
-     * @param tablaCanciones 
+     *
+     * @param tablaCanciones
      */
     public void cargarCancionesEnTabla(JTable tablaCanciones) {
         List<Cancion> canciones = cancionDAO.obtenerCanciones();
@@ -41,6 +46,10 @@ public class ControlServidor {
         );
         tablaCanciones.setModel(modeloTabla);
 
+        if (canciones.isEmpty()) {
+            System.out.println("No se encontraron canciones para mostrar.");
+        }
+
         for (Cancion cancion : canciones) {
             modeloTabla.addRow(new Object[]{
                 cancion.getNombre(),
@@ -48,13 +57,16 @@ public class ControlServidor {
                 cancion.getRutaArchivo()
             });
         }
+
+        System.out.println("Total de canciones cargadas en la tabla: " + canciones.size());
     }
 
     /**
      * Validar credenciales del cliente
+     *
      * @param usuario
      * @param contrasena
-     * @return 
+     * @return
      */
     public boolean verificarCredenciales(String usuario, String contrasena) {
         return clienteDAO.verificarCredenciales(usuario, contrasena);
@@ -62,44 +74,38 @@ public class ControlServidor {
 
     /**
      * Verificar si el cliente tiene saldo suficiente para descargar una canción
+     *
      * @param usuario
      * @param precioCancion
-     * @return 
+     * @return
      */
     public boolean validarSaldo(String usuario, double precioCancion) {
-        double saldoActual = clienteDAO.obtenerSaldo(usuario);
+        double saldoActual = clienteService.obtenerSaldo(usuario);
+        System.out.println("Saldo actual del usuario: " + saldoActual);
         return saldoActual >= precioCancion;
     }
 
     /**
      * Procesar descarga de la canción
+     *
      * @param socketCliente
      * @param usuario
      * @param nombreCancion
      * @param precioCancion
-     * @return 
+     * @return
      */
     public boolean procesarDescarga(Socket socketCliente, String usuario, String nombreCancion, double precioCancion) {
-        if (!validarSaldo(usuario, precioCancion)) {
-            System.out.println("Saldo insuficiente para descargar la canción.");
+        if (!clienteService.descontarSaldo(usuario, precioCancion)) {
+            System.out.println("Saldo insuficiente o error al actualizar saldo.");
             return false;
         }
 
-        // Descontar el saldo del cliente
-        boolean saldoDescontado = clienteDAO.descontarSaldo(usuario, precioCancion);
-        if (!saldoDescontado) {
-            System.out.println("Error al descontar el saldo.");
-            return false;
-        }
-
-        // Obtener la ruta del archivo desde la base de datos
         String rutaArchivo = cancionDAO.obtenerRutaPorNombre(nombreCancion);
         if (rutaArchivo == null) {
             System.out.println("No se encontró la ruta del archivo para la canción: " + nombreCancion);
             return false;
         }
 
-        // Enviar el archivo al cliente
         ArchivosEnviados archivosEnviados = new ArchivosEnviados();
         archivosEnviados.enviarArchivo(socketCliente, rutaArchivo);
 
@@ -109,10 +115,11 @@ public class ControlServidor {
 
     /**
      * Registra al usuario en la base de datos
+     *
      * @param nombre
      * @param usuario
      * @param contrasena
-     * @return 
+     * @return
      */
     public boolean registrarUsuario(String nombre, String usuario, String contrasena, double saldoInicial) {
         Cliente nuevoCliente = new Cliente(nombre, usuario, contrasena, saldoInicial);
@@ -129,9 +136,10 @@ public class ControlServidor {
 
     /**
      * Actualiza el saldo del cliente
+     *
      * @param usuario
      * @param nuevoSaldo
-     * @return 
+     * @return
      */
     public boolean actualizarSaldoCliente(String usuario, double nuevoSaldo) {
         System.out.println("Actualizando saldo para el usuario: " + usuario + " con saldo: " + nuevoSaldo);

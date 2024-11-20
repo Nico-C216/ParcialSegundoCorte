@@ -11,7 +11,8 @@ import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-/**Clase especializada en el manejo de eventos de las 3 ventanas
+/**
+ * Clase especializada en el manejo de eventos de las 3 ventanas
  *
  * @author nicolas
  */
@@ -34,9 +35,9 @@ public class ControladorVentanas {
         ventanaCanciones.jButton1.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                int selectedRow = ventanaCanciones.jTable1.getSelectedRow();
-                if (selectedRow != -1) {
-                    String nombreCancion = (String) ventanaCanciones.jTable1.getValueAt(selectedRow, 0);
+                int selectedIndex = ventanaCanciones.jListCanciones.getSelectedIndex();
+                if (selectedIndex != -1) {
+                    String nombreCancion = ventanaCanciones.jListCanciones.getSelectedValue();
                     mostrarReproductor(nombreCancion);
                 } else {
                     JOptionPane.showMessageDialog(ventanaCanciones, "Por favor, selecciona una canción.");
@@ -90,7 +91,8 @@ public class ControladorVentanas {
 
     /**
      * Metodo para mostrar el reproductor de las canciones
-     * @param nombreCancion 
+     *
+     * @param nombreCancion
      */
     void mostrarReproductor(String nombreCancion) {
         ventanaRegistro.setVisible(false);
@@ -101,8 +103,9 @@ public class ControladorVentanas {
 
     /**
      * Método para registrar usuario
+     *
      * @param usuario
-     * @param puertoServidor 
+     * @param puertoServidor
      */
     public void registrarUsuario(String usuario, String puertoServidor) {
         System.out.println("Usuario registrado: " + usuario + ", Puerto: " + puertoServidor);
@@ -122,29 +125,29 @@ public class ControladorVentanas {
         reproductor.setVisible(false);
         ventanaCanciones.setVisible(true);
     }
-    
+
     /**
      * Metodo para ingresar saldo
-     * @param actionListener 
+     *
+     * @param actionListener
      */
     void manejarIngresoSaldo(ActionListener actionListener) {
         ventanaCanciones.btnSaldo.addActionListener(actionListener);
     }
-    
 
     /**
      * Metodo para obtener la ventana del registro
-     * @return 
+     *
+     * @return
      */
     public VentanaRegistro getVentanaRegistro() {
         return ventanaRegistro;
     }
-    
-    
 
     /**
      * Metodo para obtener la ventana de las caciones
-     * @return 
+     *
+     * @return
      */
     public VentanaCanciones getVentanaCanciones() {
         return ventanaCanciones;
@@ -152,9 +155,11 @@ public class ControladorVentanas {
 
     /**
      * metodo para obtener la ventana del reproductor
-     * @return 
+     *
+     * @return
      */
     public Reproductor getReproductor() {
         return reproductor;
     }
+
 }
