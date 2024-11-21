@@ -133,6 +133,7 @@ public class ClienteHandler implements Runnable {
      * @param salida El flujo de salida al cliente.
      */
     private void procesarDescarga(String idCancion, PrintWriter salida) {
+        
         try {
             System.out.println("Recibiendo solicitud de descarga para la canción con ID: " + idCancion);
             Cancion cancion = cancionDAO.obtenerCancionPorId(idCancion);
