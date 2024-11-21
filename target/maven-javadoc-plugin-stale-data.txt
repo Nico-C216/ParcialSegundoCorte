@@ -1,0 +1,50 @@
+-J-Duser.language=
+-J-Duser.country=
+@options
+@packages
+-classpath
+'C:/Users/Usuario/.m2/repository/org/netbeans/external/AbsoluteLayout/RELEASE220/AbsoluteLayout-RELEASE220.jar;C:/Users/Usuario/.m2/repository/org/mariadb/jdbc/mariadb-java-client/3.0.6/mariadb-java-client-3.0.6.jar'
+-encoding
+'UTF-8'
+-protected
+-source
+'21'
+-sourcepath
+'C:/Users/Usuario/OneDrive/Documentos/Nico/Universidad/Programacion Avanzada/Paricl-Segundo-Corte-PA/ParcialSegundoCorte/src/main/java'
+-author
+-bottom
+'Copyright &#169; 2024. All rights reserved.'
+-charset
+'UTF-8'
+-d
+'C:/Users/Usuario/OneDrive/Documentos/Nico/Universidad/Programacion Avanzada/Paricl-Segundo-Corte-PA/ParcialSegundoCorte/target/reports/apidocs'
+-docencoding
+'UTF-8'
+-doctitle
+'ParcialSegundoCorte 1.0-SNAPSHOT API'
+-use
+-version
+-windowtitle
+'ParcialSegundoCorte 1.0-SNAPSHOT API'
+edu.avanzada.parcialsegundocorte.control
+edu.avanzada.parcialsegundocorte.modelo
+edu.avanzada.parcialsegundocorte.vista
+C:\Users\Usuario\.m2\repository\org\netbeans\external\AbsoluteLayout\RELEASE220\AbsoluteLayout-RELEASE220.jar = 1727635714453
+C:\Users\Usuario\.m2\repository\org\mariadb\jdbc\mariadb-java-client\3.0.6\mariadb-java-client-3.0.6.jar = 1727971771839
+C:\Users\Usuario\OneDrive\Documentos\Nico\Universidad\Programacion Avanzada\Paricl-Segundo-Corte-PA\ParcialSegundoCorte\src\main\java = 1731851006528
+C:\Users\Usuario\OneDrive\Documentos\Nico\Universidad\Programacion Avanzada\Paricl-Segundo-Corte-PA\ParcialSegundoCorte\target\reports\apidocs\allclasses-index.html = 1732223698244
+C:\Users\Usuario\OneDrive\Documentos\Nico\Universidad\Programacion Avanzada\Paricl-Segundo-Corte-PA\ParcialSegundoCorte\target\reports\apidocs\allpackages-index.html = 1732223698272
+C:\Users\Usuario\OneDrive\Documentos\Nico\Universidad\Programacion Avanzada\Paricl-Segundo-Corte-PA\ParcialSegundoCorte\target\reports\apidocs\constant-values.html = 1732223697635
+C:\Users\Usuario\OneDrive\Documentos\Nico\Universidad\Programacion Avanzada\Paricl-Segundo-Corte-PA\ParcialSegundoCorte\target\reports\apidocs\element-list = 1732223697398
+C:\Users\Usuario\OneDrive\Documentos\Nico\Universidad\Programacion Avanzada\Paricl-Segundo-Corte-PA\ParcialSegundoCorte\target\reports\apidocs\help-doc.html = 1732223698556
+C:\Users\Usuario\OneDrive\Documentos\Nico\Universidad\Programacion Avanzada\Paricl-Segundo-Corte-PA\ParcialSegundoCorte\target\reports\apidocs\index-all.html = 1732223698521
+C:\Users\Usuario\OneDrive\Documentos\Nico\Universidad\Programacion Avanzada\Paricl-Segundo-Corte-PA\ParcialSegundoCorte\target\reports\apidocs\index.html = 1732223698175
+C:\Users\Usuario\OneDrive\Documentos\Nico\Universidad\Programacion Avanzada\Paricl-Segundo-Corte-PA\ParcialSegundoCorte\target\reports\apidocs\member-search-index.js = 1732223698416
+C:\Users\Usuario\OneDrive\Documentos\Nico\Universidad\Programacion Avanzada\Paricl-Segundo-Corte-PA\ParcialSegundoCorte\target\reports\apidocs\module-search-index.js = 1732223698304
+C:\Users\Usuario\OneDrive\Documentos\Nico\Universidad\Programacion Avanzada\Paricl-Segundo-Corte-PA\ParcialSegundoCorte\target\reports\apidocs\overview-summary.html = 1732223698538
+C:\Users\Usuario\OneDrive\Documentos\Nico\Universidad\Programacion Avanzada\Paricl-Segundo-Corte-PA\ParcialSegundoCorte\target\reports\apidocs\overview-tree.html = 1732223698141
+C:\Users\Usuario\OneDrive\Documentos\Nico\Universidad\Programacion Avanzada\Paricl-Segundo-Corte-PA\ParcialSegundoCorte\target\reports\apidocs\package-search-index.js = 1732223698400
+C:\Users\Usuario\OneDrive\Documentos\Nico\Universidad\Programacion Avanzada\Paricl-Segundo-Corte-PA\ParcialSegundoCorte\target\reports\apidocs\search.html = 1732223698527
+C:\Users\Usuario\OneDrive\Documentos\Nico\Universidad\Programacion Avanzada\Paricl-Segundo-Corte-PA\ParcialSegundoCorte\target\reports\apidocs\serialized-form.html = 1732223697758
+C:\Users\Usuario\OneDrive\Documentos\Nico\Universidad\Programacion Avanzada\Paricl-Segundo-Corte-PA\ParcialSegundoCorte\target\reports\apidocs\tag-search-index.js = 1732223698421
+C:\Users\Usuario\OneDrive\Documentos\Nico\Universidad\Programacion Avanzada\Paricl-Segundo-Corte-PA\ParcialSegundoCorte\target\reports\apidocs\type-search-index.js = 1732223698405

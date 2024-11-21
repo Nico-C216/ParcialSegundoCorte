@@ -1,0 +1,1 @@
+packageSearchIndex = [{"l":"All Packages","u":"allpackages-index.html"},{"l":"edu.avanzada.parcialsegundocorte.control"},{"l":"edu.avanzada.parcialsegundocorte.modelo"},{"l":"edu.avanzada.parcialsegundocorte.vista"}];updateSearchResults();
