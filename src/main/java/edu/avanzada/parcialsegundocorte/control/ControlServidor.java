@@ -8,6 +8,11 @@ import edu.avanzada.parcialsegundocorte.modelo.Cancion;
 import edu.avanzada.parcialsegundocorte.modelo.CancionDAO;
 import edu.avanzada.parcialsegundocorte.modelo.Cliente;
 import edu.avanzada.parcialsegundocorte.modelo.ClienteDAO;
+import java.io.BufferedReader;
+import java.io.DataOutputStream;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.PrintWriter;
 import java.net.Socket;
 import java.util.List;
 import javax.swing.JTable;
@@ -23,6 +28,8 @@ public class ControlServidor {
     private CancionDAO cancionDAO;
     private ClienteDAO clienteDAO;
     private ClienteService clienteService;
+    private String direccionServidor;
+    private int puertoServidor;
 
     /**
      * Constructor
@@ -31,6 +38,8 @@ public class ControlServidor {
         this.cancionDAO = new CancionDAO();
         this.clienteDAO = new ClienteDAO();
         this.clienteService = new ClienteService(clienteDAO);
+        this.direccionServidor = "127.0.0.1";
+        this.puertoServidor = ConfigProperties.getPuerto();
 
     }
 
@@ -144,6 +153,67 @@ public class ControlServidor {
     public boolean actualizarSaldoCliente(String usuario, double nuevoSaldo) {
         System.out.println("Actualizando saldo para el usuario: " + usuario + " con saldo: " + nuevoSaldo);
         return clienteDAO.actualizarSaldo(usuario, nuevoSaldo);
+    }
+
+    /**
+     * Metodo para poder descargar la cancion
+     * @param usuario
+     * @param contrasena
+     * @param nombreCancion
+     * @return 
+     */
+    public boolean descargarCancion(String usuario, String contrasena, String nombreCancion) {
+        try (Socket socketCliente = new Socket(direccionServidor, puertoServidor); BufferedReader entrada = new BufferedReader(new InputStreamReader(socketCliente.getInputStream())); PrintWriter salida = new PrintWriter(socketCliente.getOutputStream(), true)) {
+
+            // Autenticar al usuario
+            if (!autenticarUsuario(entrada, salida, usuario, contrasena)) {
+                System.out.println("Error: Autenticación fallida.");
+                return false;
+            }
+
+            // Enviar solicitud de descarga
+            salida.println("DESCARGAR " + nombreCancion);
+
+            // Leer respuesta del servidor
+            String respuesta = entrada.readLine();
+            if ("Canción descargada exitosamente.".equals(respuesta)) {
+                // Usar ArchivosRecibidos para guardar la canción
+                ArchivosRecibidos archivosRecibidos = new ArchivosRecibidos();
+                archivosRecibidos.recibirArchivo(socketCliente, nombreCancion);
+                System.out.println("Descarga completada: " + nombreCancion);
+                return true;
+            } else {
+                System.out.println("Error del servidor: " + respuesta);
+                return false;
+            }
+
+        } catch (IOException e) {
+            System.out.println("Error durante la conexión al servidor: " + e.getMessage());
+            return false;
+        }
+    }
+
+    /**
+     * Método para autenticar al usuario en el servidor.
+     *
+     * @param entrada Flujo de entrada del servidor.
+     * @param salida Flujo de salida hacia el servidor.
+     * @param usuario Usuario del cliente.
+     * @param contrasena Contraseña del cliente.
+     * @return true si la autenticación fue exitosa, false de lo contrario.
+     */
+    private boolean autenticarUsuario(BufferedReader entrada, PrintWriter salida, String usuario, String contrasena) throws IOException {
+        // Leer mensajes del servidor
+        System.out.println(entrada.readLine()); // "Ingrese su usuario:"
+        salida.println(usuario);
+
+        System.out.println(entrada.readLine()); // "Ingrese su contraseña:"
+        salida.println(contrasena);
+
+        String respuesta = entrada.readLine();
+        System.out.println(respuesta); // Mensaje del servidor sobre el resultado
+
+        return "Autenticación exitosa.".equals(respuesta);
     }
 
 }

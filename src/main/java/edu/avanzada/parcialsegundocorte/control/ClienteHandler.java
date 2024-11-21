@@ -4,17 +4,19 @@
  */
 package edu.avanzada.parcialsegundocorte.control;
 
+import edu.avanzada.parcialsegundocorte.modelo.Cancion;
 import edu.avanzada.parcialsegundocorte.modelo.CancionDAO;
-import edu.avanzada.parcialsegundocorte.modelo.ClienteDAO;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
+import java.io.*;
 import java.net.Socket;
-import java.util.logging.Level;
 import java.util.logging.Logger;
+import static org.mariadb.jdbc.client.socket.impl.UnixDomainSocket.socket;
 
-/**Clase especializada en el manejo de de los hilos de cada cliete
+/**
+ * Clase especializada en el manejo de de los hilos de cada cliete
  *
  * @author Nicolas
  */
@@ -29,9 +31,10 @@ public class ClienteHandler implements Runnable {
 
     /**
      * Constructor
+     *
      * @param socketCliente
      * @param clienteService
-     * @param cancionDAO 
+     * @param cancionDAO
      */
     public ClienteHandler(Socket socketCliente, ClienteService clienteService, CancionDAO cancionDAO) {
         this.socketCliente = socketCliente;
@@ -47,37 +50,39 @@ public class ClienteHandler implements Runnable {
     public void run() {
         try (BufferedReader entrada = new BufferedReader(new InputStreamReader(socketCliente.getInputStream())); PrintWriter salida = new PrintWriter(socketCliente.getOutputStream(), true)) {
 
-            System.out.println("Cliente conectado desde: " + socketCliente.getInetAddress().getHostAddress());
+            String linea;
+            while ((linea = entrada.readLine()) != null) {
+                System.out.println("Solicitud recibida: " + linea);
 
-            if (!autenticarCliente(entrada, salida)) {
-                System.out.println("Cliente rechazado: autenticación fallida.");
-                return;
+                String[] comando = linea.split(" ");
+                if (comando[0].equalsIgnoreCase("DESCARGAR") && comando.length == 2) {
+                    String idCancion = comando[1];
+                    procesarDescarga(idCancion, salida);
+                } else {
+                    salida.println("Comando no reconocido: " + linea);
+                }
             }
-
-            System.out.println("Usuario autenticado: " + usuario);
-            enviarListaCanciones(salida);
-            procesarSolicitudes(entrada, salida);
-
         } catch (IOException e) {
-            System.out.println("Error en la comunicación con el cliente: " + e.getMessage());
+            System.out.println("Error al comunicarse con el cliente: " + e.getMessage());
+            e.printStackTrace();
         } finally {
-            System.out.println("Cliente desconectado: " + usuario);
+            try {
+                socketCliente.close();
+            } catch (IOException e) {
+                System.out.println("Error al cerrar el socket: " + e.getMessage());
+            }
         }
     }
 
     /**
      * Metodo para autenticar al cliente
+     *
      * @param entrada
      * @param salida
      * @return
-     * @throws IOException 
+     * @throws IOException
      */
-    private boolean autenticarCliente(BufferedReader entrada, PrintWriter salida) throws IOException {
-        salida.println("Ingrese su usuario:");
-        String usuario = entrada.readLine();
-        salida.println("Ingrese su contraseña:");
-        String contrasena = entrada.readLine();
-
+    private boolean autenticarCliente(String usuario, String contrasena, PrintWriter salida) {
         if (clienteService.autenticarCliente(usuario, contrasena)) {
             this.usuario = usuario;
             salida.println("Autenticación exitosa.");
@@ -90,7 +95,8 @@ public class ClienteHandler implements Runnable {
 
     /**
      * Metodo para enviarle unalista de todas las canciones al usuario
-     * @param salida 
+     *
+     * @param salida
      */
     private void enviarListaCanciones(PrintWriter salida) {
         salida.println("Lista de canciones disponibles:");
@@ -100,9 +106,10 @@ public class ClienteHandler implements Runnable {
 
     /**
      * Metodo para procesar la solicitud del usuario
+     *
      * @param entrada
      * @param salida
-     * @throws IOException 
+     * @throws IOException
      */
     private void procesarSolicitudes(BufferedReader entrada, PrintWriter salida) throws IOException {
         String solicitud;
@@ -120,23 +127,49 @@ public class ClienteHandler implements Runnable {
     }
 
     /**
-     * Metodo para procesar la descarga
-     * @param nombreCancion
-     * @param salida 
+     * Procesa la solicitud de descarga de una canción.
+     *
+     * @param idCancion El ID de la canción solicitada.
+     * @param salida El flujo de salida al cliente.
      */
-    private void procesarDescarga(String nombreCancion, PrintWriter salida) {
-        String rutaCancion = cancionDAO.obtenerRutaPorNombre(nombreCancion);
-        if (rutaCancion == null) {
-            salida.println("Canción no encontrada.");
-            return;
-        }
+    private void procesarDescarga(String idCancion, PrintWriter salida) {
+        try {
+            System.out.println("Recibiendo solicitud de descarga para la canción con ID: " + idCancion);
+            Cancion cancion = cancionDAO.obtenerCancionPorId(idCancion);
 
-        double costo = 1500.0;
-        if (clienteService.descontarSaldo(usuario, costo)) {
-            archivosEnviados.enviarArchivo(socketCliente, rutaCancion);
-            salida.println("Canción descargada exitosamente.");
-        } else {
-            salida.println("Saldo insuficiente.");
+            if (cancion == null) {
+                salida.println("ERROR: Canción no encontrada.");
+                return;
+            }
+
+            File archivoCancion = new File(cancion.getRutaArchivo());
+
+            if (!archivoCancion.exists()) {
+                salida.println("ERROR: Archivo de la canción no disponible en el servidor.");
+                return;
+            }
+
+            // Confirmación de inicio de la descarga
+            salida.println("OK: Iniciando descarga de la canción...");
+
+            // Enviar el archivo al cliente
+            try (BufferedOutputStream salidaArchivo = new BufferedOutputStream(socketCliente.getOutputStream()); FileInputStream entradaArchivo = new FileInputStream(archivoCancion)) {
+
+                byte[] buffer = new byte[4096];
+                int bytesLeidos;
+
+                while ((bytesLeidos = entradaArchivo.read(buffer)) != -1) {
+                    salidaArchivo.write(buffer, 0, bytesLeidos);
+                }
+
+                salidaArchivo.flush();  // Asegurarse de que todo se haya enviado
+                System.out.println("Archivo enviado correctamente: " + cancion.getNombre());
+            }
+
+        } catch (IOException e) {
+            salida.println("ERROR: Ocurrió un problema al enviar el archivo.");
+            System.out.println("Error al procesar la descarga: " + e.getMessage());
+            e.printStackTrace();
         }
     }
 }

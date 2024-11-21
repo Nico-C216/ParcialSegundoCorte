@@ -8,6 +8,8 @@ import edu.avanzada.parcialsegundocorte.modelo.Cancion;
 import edu.avanzada.parcialsegundocorte.modelo.CancionDAO;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.io.IOException;
+import java.net.Socket;
 import java.util.List;
 import javax.swing.DefaultListModel;
 import javax.swing.JOptionPane;
@@ -127,27 +129,43 @@ public class ControladorAplicacion {
 
         // Evento para descargar una canción
         controladorVentanas.getVentanaCanciones().jButton3.addActionListener(e -> {
-            String cancionSeleccionada = controladorVentanas.getVentanaCanciones().jListCanciones.getSelectedValue();
-            if (cancionSeleccionada != null) {
-                double precioCancion = 1500.0; // Precio fijo, ajustable según la lógica
-                boolean exito = controlServidor.procesarDescarga(
-                        null, usuarioActual, cancionSeleccionada, precioCancion
+            // Verificar que haya un usuario autenticado
+            if (usuarioActual == null) {
+                JOptionPane.showMessageDialog(
+                        controladorVentanas.getVentanaCanciones(),
+                        "Debes estar autenticado para descargar canciones.",
+                        "Error",
+                        JOptionPane.ERROR_MESSAGE
                 );
+                return;
+            }
+
+            // Obtener la canción seleccionada
+            String cancionSeleccionada = controladorVentanas.getVentanaCanciones().jListCanciones.getSelectedValue();
+
+            if (cancionSeleccionada != null) {
+                // Intentar descargar la canción con el usuario actual
+                boolean exito = controlServidor.descargarCancion(usuarioActual, null, cancionSeleccionada); // No pasamos contraseña, si no es necesaria
+
                 if (exito) {
                     JOptionPane.showMessageDialog(
                             controladorVentanas.getVentanaCanciones(),
-                            "La canción se descargó exitosamente."
+                            "La canción '" + cancionSeleccionada + "' se descargó correctamente."
                     );
                 } else {
                     JOptionPane.showMessageDialog(
                             controladorVentanas.getVentanaCanciones(),
-                            "Error al descargar la canción. Verifica tu saldo."
+                            "Error al descargar la canción. Verifica tu saldo o intenta nuevamente.",
+                            "Error",
+                            JOptionPane.ERROR_MESSAGE
                     );
                 }
             } else {
                 JOptionPane.showMessageDialog(
                         controladorVentanas.getVentanaCanciones(),
-                        "Por favor, selecciona una canción para descargar."
+                        "Por favor, selecciona una canción para descargar.",
+                        "Error",
+                        JOptionPane.ERROR_MESSAGE
                 );
             }
         });

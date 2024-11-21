@@ -45,4 +45,21 @@ public class Cancion {
     public String getRutaArchivo() {
         return rutaArchivo;
     }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public void setNombre(String nombre) {
+        this.nombre = nombre;
+    }
+
+    public void setArtista(String artista) {
+        this.artista = artista;
+    }
+
+    public void setRutaArchivo(String rutaArchivo) {
+        this.rutaArchivo = rutaArchivo;
+    }
+    
 }

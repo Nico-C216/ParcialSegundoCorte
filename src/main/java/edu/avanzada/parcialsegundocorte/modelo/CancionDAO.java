@@ -67,4 +67,31 @@ public class CancionDAO {
 
         return ruta;
     }
+
+    /**
+     * Metodo para obtener la cancion por el id
+     * @param idCancion
+     * @return 
+     */
+    public Cancion obtenerCancionPorId(String idCancion) {
+        String sql = "SELECT id, nombre, artista, rutaArchivo FROM canciones WHERE id = ?";
+        try (Connection conexion = ConexionMSQ.getConexion(); PreparedStatement ps = conexion.prepareStatement(sql)) {
+
+            ps.setString(1, idCancion);
+            ResultSet rs = ps.executeQuery();
+
+            if (rs.next()) {
+                // Utiliza el constructor existente de Cancion
+                return new Cancion(
+                        rs.getInt("id"),
+                        rs.getString("nombre"),
+                        rs.getString("artista"),
+                        rs.getString("rutaArchivo")
+                );
+            }
+        } catch (Exception e) {
+            System.out.println("Error al obtener la canción: " + e.getMessage());
+        }
+        return null;
+    }
 }

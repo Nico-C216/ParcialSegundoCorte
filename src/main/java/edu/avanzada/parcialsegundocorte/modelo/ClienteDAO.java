@@ -40,25 +40,39 @@ public class ClienteDAO {
 
     /**
      * Método para descontar saldo tras una compra
-     *
-     * @param usuario
-     * @param monto
-     * @return
+     * @param nombreUsuario
+     * @param costoCancion
+     * @return 
      */
-    public boolean descontarSaldo(String usuario, double monto) {
-        String sql = "UPDATE clientes SET saldo = saldo - ? WHERE usuario = ?";
+    public boolean descontarSaldo(String nombreUsuario, double costoCancion) {
+        String verificarSaldo = "SELECT saldo FROM usuarios WHERE nombre = ?";
+        String actualizarSaldo = "UPDATE usuarios SET saldo = saldo - ? WHERE nombre = ?";
 
-        try (Connection cn = ConexionMSQ.getConexion(); PreparedStatement ps = cn.prepareStatement(sql)) {
-
-            ps.setDouble(1, monto);
-            ps.setString(2, usuario);
-
-            int filasAfectadas = ps.executeUpdate();
-            return filasAfectadas > 0;
+        try (Connection cn = ConexionMSQ.getConexion()) {
+            // Verificar saldo
+            try (PreparedStatement ps = cn.prepareStatement(verificarSaldo)) {
+                ps.setString(1, nombreUsuario);
+                try (ResultSet rs = ps.executeQuery()) {
+                    if (rs.next()) {
+                        double saldoActual = rs.getDouble("saldo");
+                        if (saldoActual >= costoCancion) {
+                            // Actualizar saldo
+                            try (PreparedStatement ps2 = cn.prepareStatement(actualizarSaldo)) {
+                                ps2.setDouble(1, costoCancion);
+                                ps2.setString(2, nombreUsuario);
+                                ps2.executeUpdate();
+                                return true; // Saldo descontado correctamente
+                            }
+                        } else {
+                            System.out.println("No hay saldo suficiente.");
+                            return false; // Saldo insuficiente
+                        }
+                    }
+                }
+            }
         } catch (SQLException ex) {
             System.out.println("Error al descontar saldo: " + ex.getMessage());
         }
-
         return false;
     }
 
